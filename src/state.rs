@@ -20,7 +20,6 @@
 //! └── Depth Texture (depth testing)
 //! ```
 
-use std::future::Future;
 use std::sync::Arc;
 
 use wgpu::util::DeviceExt;
@@ -613,22 +612,4 @@ impl State {
 
         Ok(())
     }
-}
-
-// ============================================================================
-// MARK: Async Helper
-// ============================================================================
-
-/// Blocks on an async future using pollster
-///
-/// wgpu initialization is async, but our main function is synchronous.
-/// This helper bridges that gap by running the future to completion.
-///
-/// ## Arguments
-/// - `future`: The async operation to run
-///
-/// ## Returns
-/// The result of the future
-pub fn block_on<T>(future: impl Future<Output = T>) -> T {
-    pollster::block_on(future)
 }

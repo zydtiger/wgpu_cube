@@ -104,7 +104,8 @@ impl ApplicationHandler for App {
             // Initialize the wgpu state asynchronously
             // This creates the GPU device, pipeline, buffers, etc.
             // block_on() runs the async initialization to completion
-            self.state = Some(state::block_on(State::new(window.clone())));
+            let state = pollster::block_on(State::new(window.clone()));
+            self.state = Some(state);
 
             // Store the window reference
             self.window = Some(window);
