@@ -5,7 +5,7 @@
 //! proper normals for flat shading.
 //!
 //! ## Cube Layout
-//! ```text
+//!
 //!        ┌────────┐
 //!       /│       /│
 //!      / │  +Y  / │
@@ -18,7 +18,7 @@
 //!    │/       │/         /
 //!    └────────┘         /
 //!        +X            +Z (front)
-//! ```
+//!
 //!
 //! ## Vertex Count
 //! - 24 vertices (6 faces × 4 vertices per face)
@@ -39,12 +39,12 @@ use wgpu::VertexAttribute;
 /// for lighting calculations in the fragment shader.
 ///
 /// ## Memory Layout
-/// ```text
+///
 /// Offset  Size  Field
 /// 0       12    position (3 × f32)
 /// 12      12    normal   (3 × f32)
 /// Total:  24 bytes
-/// ```
+///
 ///
 /// ## Attributes
 /// | Location | Attribute |  Format   |
@@ -84,14 +84,14 @@ impl Vertex {
             attributes: &[
                 // Position attribute @ location(0)
                 VertexAttribute {
-                    offset: 0, // Starts at beginning of vertex
-                    shader_location: 0, // @location(0) in WGSL
+                    offset: 0,                             // Starts at beginning of vertex
+                    shader_location: 0,                    // @location(0) in WGSL
                     format: wgpu::VertexFormat::Float32x3, // vec3<f32>
                 },
                 // Normal attribute @ location(1)
                 VertexAttribute {
                     offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress, // After position
-                    shader_location: 1, // @location(1) in WGSL
+                    shader_location: 1,                    // @location(1) in WGSL
                     format: wgpu::VertexFormat::Float32x3, // vec3<f32>
                 },
             ],
@@ -142,7 +142,6 @@ pub const VERTICES: &[Vertex] = &[
         position: [-0.5, 0.5, 0.5],
         normal: [0.0, 0.0, 1.0],
     },
-
     // =========================================================================
     // Back face (normal: -Z, away from viewer)
     // =========================================================================
@@ -162,7 +161,6 @@ pub const VERTICES: &[Vertex] = &[
         position: [0.5, -0.5, -0.5],
         normal: [0.0, 0.0, -1.0],
     },
-
     // =========================================================================
     // Top face (normal: +Y)
     // =========================================================================
@@ -182,7 +180,6 @@ pub const VERTICES: &[Vertex] = &[
         position: [0.5, 0.5, -0.5],
         normal: [0.0, 1.0, 0.0],
     },
-
     // =========================================================================
     // Bottom face (normal: -Y)
     // =========================================================================
@@ -202,7 +199,6 @@ pub const VERTICES: &[Vertex] = &[
         position: [-0.5, -0.5, 0.5],
         normal: [0.0, -1.0, 0.0],
     },
-
     // =========================================================================
     // Right face (normal: +X)
     // =========================================================================
@@ -222,7 +218,6 @@ pub const VERTICES: &[Vertex] = &[
         position: [0.5, -0.5, 0.5],
         normal: [1.0, 0.0, 0.0],
     },
-
     // =========================================================================
     // Left face (normal: -X)
     // =========================================================================
@@ -268,20 +263,10 @@ pub const VERTICES: &[Vertex] = &[
 /// This creates two triangles: (v0, v1, v2) and (v2, v3, v0)
 pub const INDICES: &[u16] = &[
     // Front face (vertices 0-3)
-    0, 1, 2, 2, 3, 0,
-
-    // Back face (vertices 4-7)
-    4, 5, 6, 6, 7, 4,
-
-    // Top face (vertices 8-11)
-    8, 9, 10, 10, 11, 8,
-
-    // Bottom face (vertices 12-15)
-    12, 13, 14, 14, 15, 12,
-
-    // Right face (vertices 16-19)
-    16, 17, 18, 18, 19, 16,
-
-    // Left face (vertices 20-23)
+    0, 1, 2, 2, 3, 0, // Back face (vertices 4-7)
+    4, 5, 6, 6, 7, 4, // Top face (vertices 8-11)
+    8, 9, 10, 10, 11, 8, // Bottom face (vertices 12-15)
+    12, 13, 14, 14, 15, 12, // Right face (vertices 16-19)
+    16, 17, 18, 18, 19, 16, // Left face (vertices 20-23)
     20, 21, 22, 22, 23, 20,
 ];

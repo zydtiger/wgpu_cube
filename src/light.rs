@@ -6,14 +6,14 @@
 //! ## Blinn-Phong Lighting Model
 //!
 //! The lighting is calculated in the fragment shader using:
-//! ```text
-//! final_color = (ambient + diffuse + specular) × object_color
-//! ```
+//!
+//!   final_color = (ambient + diffuse + specular) × object_color
+//!
 //!
 //! Where:
-//! - **Ambient**: Base illumination independent of light direction
-//! - **Diffuse**: Lambert cosine law (dot product of normal and light direction)
-//! - **Specular**: Blinn-Phong highlight using half-vector
+//! - Ambient: Base illumination independent of light direction
+//! - Diffuse: Lambert cosine law (dot product of normal and light direction)
+//! - Specular: Blinn-Phong highlight using half-vector
 
 use glam::Vec3;
 
