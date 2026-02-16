@@ -131,6 +131,10 @@ pub struct State {
 }
 
 impl State {
+    // ========================================================================
+    // MARK: State Initialization
+    // ========================================================================
+
     /// Creates a new State, initializing all wgpu resources
     ///
     /// This is an async function because adapter and device creation
