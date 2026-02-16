@@ -41,15 +41,15 @@ use crate::light::{Light, LightUniform};
 ///
 /// ## Resource Categories
 ///
-/// | Category | Fields | Purpose |
-/// |----------|--------|---------|
-/// | Core | surface, device, queue, config, size | GPU connection |
-/// | Pipeline | render_pipeline | Shader + render state |
-/// | Geometry | vertex_buffer, index_buffer, num_indices | Mesh data |
-/// | Camera | camera, camera_uniform, camera_buffer | View transformation |
-/// | Lighting | light, light_uniform, light_buffer | Illumination |
-/// | Binding | bind_group, bind_group_layout | Shader resources |
-/// | Depth | depth_texture, depth_texture_view | Depth testing |
+/// | Category |                  Fields                  |       Purpose         |
+/// |----------|------------------------------------------|-----------------------|
+/// | Core     | surface, device, queue, config, size     | GPU connection        |
+/// | Pipeline | render_pipeline                          | Shader + render state |
+/// | Geometry | vertex_buffer, index_buffer, num_indices | Mesh data             |
+/// | Camera   | camera, camera_uniform, camera_buffer    | View transformation   |
+/// | Lighting | light, light_uniform, light_buffer       | Illumination          |
+/// | Binding  | bind_group, bind_group_layout            | Shader resources      |
+/// | Depth    | depth_texture, depth_texture_view        | Depth testing         |
 pub struct State {
     // ========================================================================
     // Core wgpu Resources

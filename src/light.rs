@@ -45,10 +45,10 @@ impl Light {
     /// Creates a new light with default settings
     ///
     /// ## Default Values
-    /// | Property | Value |
-    /// |----------|-------|
-    /// | position | (2.0, 2.0, 3.0) |
-    /// | color    | (1.0, 1.0, 1.0) (white) |
+    /// | Property |         Value         |
+    /// |----------|-----------------------|
+    /// | position | (2.0, 2.0, 3.0)       |
+    /// | color    | (1.0, 1.0, 1.0) white |
     pub fn new() -> Self {
         Self {
             position: Vec3::new(2.0, 2.0, 3.0),

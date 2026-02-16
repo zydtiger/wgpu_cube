@@ -127,7 +127,7 @@ impl ApplicationHandler for App {
     ) {
         // Guard: Exit early if state isn't initialized yet
         let Some(state) = &mut self.state else { return };
-        let Some(_window) = &self.window else { return };
+        let Some(window) = &self.window else { return };
 
         match event {
             // User requested to close the window (clicked X button, Cmd+W, etc.)
@@ -172,7 +172,7 @@ impl ApplicationHandler for App {
                 // Surface was lost (e.g., monitor disconnected) or outdated
                 // Reconfigure the surface with current size
                 Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
-                    state.resize(state.size);
+                    state.resize(window.inner_size());
                 }
 
                 // GPU ran out of memory; fatal error

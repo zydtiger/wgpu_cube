@@ -77,14 +77,14 @@ impl Camera {
     /// - `height`: Viewport height in pixels
     ///
     /// ## Default Values
-    /// | Parameter | Value |
-    /// |-----------|-------|
-    /// | eye | (0, 0, 3) |
-    /// | target | (0, 0, 0) |
-    /// | up | (0, 1, 0) |
-    /// | fovy | 45° (in radians) |
-    /// | znear | 0.1 |
-    /// | zfar | 100.0 |
+    /// | Parameter |      Value       |
+    /// |-----------|------------------|
+    /// | eye       | (0, 0, 3)        |
+    /// | target    | (0, 0, 0)        |
+    /// | up        | (0, 1, 0)        |
+    /// | fovy      | 45° (in radians) |
+    /// | znear     | 0.1              |
+    /// | zfar      | 100.0            |
     pub fn new(width: u32, height: u32) -> Self {
         Self {
             eye: Vec3::new(0.0, 0.0, 3.0),

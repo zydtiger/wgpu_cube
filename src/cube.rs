@@ -1,7 +1,7 @@
 //! Cube geometry for 3D rendering
 //!
 //! This module defines the vertex data and indices for rendering a unit cube
-//! (2×2×2 units, centered at origin). Each face has unique vertices with
+//! (1×1×1 units, centered at origin). Each face has unique vertices with
 //! proper normals for flat shading.
 //!
 //! ## Cube Layout
@@ -47,14 +47,14 @@ use wgpu::VertexAttribute;
 /// ```
 ///
 /// ## Attributes
-/// | Location | Attribute | Format      |
-/// |----------|-----------|-------------|
-/// | 0        | position  | Float32x3   |
-/// | 1        | normal    | Float32x3   |
+/// | Location | Attribute |  Format   |
+/// |----------|-----------|-----------|
+/// | 0        | position  | Float32x3 |
+/// | 1        | normal    | Float32x3 |
 #[repr(C)]
 #[derive(Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct Vertex {
-    /// Position in model space (cube centered at origin, size 2×2×2)
+    /// Position in model space (cube centered at origin, size 1×1×1)
     pub position: [f32; 3],
 
     /// Normal vector for lighting calculations
@@ -110,14 +110,14 @@ impl Vertex {
 /// faces, the normals would be averaged (smooth shading).
 ///
 /// ## Face Layout
-/// | Face   | Vertices | Normal   |
-/// |--------|----------|----------|
-/// | Front  | 0-3      | +Z       |
-/// | Back   | 4-7      | -Z       |
-/// | Top    | 8-11     | +Y       |
-/// | Bottom | 12-15    | -Y       |
-/// | Right  | 16-19    | +X       |
-/// | Left   | 20-23    | -X       |
+/// |  Face  | Vertices | Normal |
+/// |--------|----------|--------|
+/// | Front  | 0-3      | +Z     |
+/// | Back   | 4-7      | -Z     |
+/// | Top    | 8-11     | +Y     |
+/// | Bottom | 12-15    | -Y     |
+/// | Right  | 16-19    | +X     |
+/// | Left   | 20-23    | -X     |
 ///
 /// ## Winding Order
 /// Vertices are in counter-clockwise (CCW) order when viewed from outside.
