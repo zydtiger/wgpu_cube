@@ -563,9 +563,9 @@ impl State {
                     ops: wgpu::Operations {
                         // Clear to dark blue-gray background
                         load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.12,
-                            b: 0.18,
+                            r: 0.0,
+                            g: 0.0,
+                            b: 0.0,
                             a: 1.0,
                         }),
                         store: wgpu::StoreOp::Store,
