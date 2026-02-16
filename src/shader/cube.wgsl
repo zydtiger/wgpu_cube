@@ -172,12 +172,12 @@ fn vertex_main(input: VertexInput) -> VertexOutput {
 /// ```
 ///
 /// ## Parameters
-/// | Component | Strength | Notes |
-/// |-----------|----------|-------|
-/// | Ambient   | 0.1      | Base illumination |
-/// | Diffuse   | 1.0      | Lambert cosine |
-/// | Specular  | 0.5      | Highlights |
-/// | Shininess | 32       | Specular exponent |
+/// |  Component  | Strength |       Notes        |
+/// |-------------|----------|--------------------|
+/// | Ambient     | 0.1      | Base illumination  |
+/// | Diffuse     | 1.0      | Lambert cosine     |
+/// | Specular    | 0.5      | Highlights         |
+/// | Shininess   | 32       | Specular exponent  |
 @fragment
 fn fragment_main(input: VertexOutput) -> @location(0) vec4<f32> {
     // ========================================================================
