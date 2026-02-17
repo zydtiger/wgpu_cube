@@ -7,10 +7,9 @@
 //!
 //! ## Coordinate Systems
 //!
-//! ```text
 //! World Space → View Space → Clip Space
-//!     (view)        (proj)     (correction)
-//! ```
+//!   (view)        (proj)     (correction)
+//!
 //!
 //! ### wgpu Coordinate System Notes
 //! - wgpu uses a right-handed coordinate system
@@ -39,7 +38,7 @@ use glam::{Mat4, Vec3};
 /// - `zfar`: Far clipping plane distance
 ///
 /// ## Example
-/// ```ignore
+/// ```
 /// let camera = Camera::new(800, 600);
 /// let view_proj = camera.build_view_projection_matrix();
 /// ```
@@ -116,7 +115,7 @@ impl Camera {
     /// ## Coordinate Conversion
     /// The correction matrix converts from OpenGL's Z-range [-1, 1]
     /// to wgpu's Z-range [0, 1]:
-    /// ```text
+    /// ```
     /// z_wgpu = 0.5 * z_opengl + 0.5
     /// ```
     ///
