@@ -65,6 +65,15 @@ struct LightUniform {
     _padding2: f32,
 }
 
+/// Model uniform buffer (binding 2)
+///
+/// Contains the model matrix for transforming vertices from
+/// model space to world space (e.g., rotation).
+struct ModelUniform {
+    /// Model matrix (4x4 column-major)
+    model: mat4x4<f32>,
+}
+
 // ============================================================================
 // MARK: Resource Bindings
 // ============================================================================
@@ -76,6 +85,10 @@ struct LightUniform {
 /// Light uniform buffer binding
 /// @group(0) @binding(1) - Matches bind group layout entry 1
 @group(0) @binding(1) var<uniform> light: LightUniform;
+
+/// Model uniform buffer binding
+/// @group(0) @binding(2) - Matches bind group layout entry 2
+@group(0) @binding(2) var<uniform> model: ModelUniform;
 
 // ============================================================================
 // MARK: Vertex Shader Structures
@@ -121,29 +134,24 @@ struct VertexOutput {
 ///
 /// ## Transform Pipeline
 /// ```text
-/// Model Space → (view_proj matrix) → Clip Space
+/// Model Space → (model matrix) → World Space → (view_proj matrix) → Clip Space
 /// ```
-///
-/// ## Note
-/// Since our cube is already centered at origin with no model transform,
-/// model space = world space. In a more complex scene, you'd apply
-/// a model matrix here.
 @vertex
 fn vertex_main(input: VertexInput) -> VertexOutput {
     var output: VertexOutput;
 
-    // Pass world position (no model transform, so model = world)
-    output.world_position = input.position;
+    // Transform position to world space using model matrix
+    let world_pos = model.model * vec4<f32>(input.position, 1.0);
+    output.world_position = world_pos.xyz;
 
-    // Pass normal for interpolation
-    // Note: For correct lighting with non-uniform scaling, you'd need
-    // to transform normals with the inverse-transpose of the model matrix
-    output.world_normal = input.normal;
+    // Transform normal to world space
+    // For rotation-only transforms, we can use the model matrix directly
+    // For non-uniform scaling, use inverse-transpose of model matrix
+    let world_normal = model.model * vec4<f32>(input.normal, 0.0);
+    output.world_normal = world_normal.xyz;
 
     // Transform position to clip space
-    // This applies: view_proj * vec4(position, 1.0)
-    // Which is: correction * projection * view * model * position
-    output.clip_position = camera.view_proj * vec4<f32>(input.position, 1.0);
+    output.clip_position = camera.view_proj * world_pos;
 
     return output;
 }

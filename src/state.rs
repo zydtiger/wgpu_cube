@@ -21,7 +21,9 @@
 //! ```
 
 use std::sync::Arc;
+use std::time::Instant;
 
+use glam::Mat4;
 use wgpu::util::DeviceExt;
 use winit::window::Window;
 
@@ -112,6 +114,15 @@ pub struct State {
     pub light_buffer: wgpu::Buffer,
 
     // ========================================================================
+    // Model Resources
+    // ========================================================================
+    /// Model matrix for cube rotation
+    pub model_uniform: [[f32; 4]; 4],
+
+    /// GPU buffer containing model matrix
+    pub model_buffer: wgpu::Buffer,
+
+    // ========================================================================
     // Binding Resources
     // ========================================================================
     /// Bind group (binds buffers to shader slots)
@@ -128,6 +139,15 @@ pub struct State {
 
     /// View into the depth texture
     pub depth_texture_view: wgpu::TextureView,
+
+    // ========================================================================
+    // Animation State
+    // ========================================================================
+    /// Time of last frame (for delta time calculation)
+    pub last_frame: Instant,
+
+    /// Current rotation angle in radians
+    pub rotation_angle: f32,
 }
 
 impl State {
@@ -272,6 +292,17 @@ impl State {
         });
 
         // ====================================================================
+        // Create Model Resources
+        // ====================================================================
+
+        let model_uniform = Mat4::IDENTITY.to_cols_array_2d();
+        let model_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Model Buffer"),
+            contents: bytemuck::cast_slice(&[model_uniform]),
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+        });
+
+        // ====================================================================
         // Create Bind Group Layout
         // ====================================================================
 
@@ -303,6 +334,18 @@ impl State {
                     },
                     count: None,
                 },
+                // Binding 2: Model uniform buffer
+                // Only visible to vertex shader (transforms vertices)
+                wgpu::BindGroupLayoutEntry {
+                    binding: 2,
+                    visibility: wgpu::ShaderStages::VERTEX,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                },
             ],
         });
 
@@ -322,6 +365,10 @@ impl State {
                 wgpu::BindGroupEntry {
                     binding: 1,
                     resource: light_buffer.as_entire_binding(),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 2,
+                    resource: model_buffer.as_entire_binding(),
                 },
             ],
         });
@@ -456,10 +503,14 @@ impl State {
             light,
             light_uniform,
             light_buffer,
+            model_uniform,
+            model_buffer,
             bind_group,
             bind_group_layout,
             depth_texture,
             depth_texture_view,
+            last_frame: Instant::now(),
+            rotation_angle: 0.0,
         }
     }
 
@@ -515,6 +566,38 @@ impl State {
                 .depth_texture
                 .create_view(&wgpu::TextureViewDescriptor::default());
         }
+    }
+
+    // ========================================================================
+    // MARK: Update Function
+    // ========================================================================
+
+    /// Updates the cube rotation based on elapsed time
+    ///
+    /// The cube rotates at 2π radians per 10 seconds around the Y axis.
+    ///
+    /// ## Arguments
+    /// - `delta_time`: Time elapsed since last frame in seconds
+    pub fn update(&mut self, delta_time: f32) {
+        // Rotation speed: 2π radians / 10 seconds
+        let rotation_speed = std::f32::consts::TAU / 10.0;
+
+        // Update rotation angle
+        self.rotation_angle += rotation_speed * delta_time;
+
+        // Keep angle in [0, 2π) range
+        self.rotation_angle %= std::f32::consts::TAU;
+
+        // Create rotation matrix around Y axis
+        let model = Mat4::from_rotation_y(self.rotation_angle);
+        self.model_uniform = model.to_cols_array_2d();
+
+        // Upload to GPU
+        self.queue.write_buffer(
+            &self.model_buffer,
+            0,
+            bytemuck::cast_slice(&[self.model_uniform]),
+        );
     }
 
     // ========================================================================

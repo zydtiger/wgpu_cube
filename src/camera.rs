@@ -86,9 +86,9 @@ impl Camera {
     /// | zfar      | 100.0            |
     pub fn new(width: u32, height: u32) -> Self {
         Self {
-            eye: Vec3::new(0.0, 0.0, 3.0),
+            eye: Vec3::new(0.0, 1.0, 3.0),
             target: Vec3::ZERO,
-            up: Vec3::Y,
+            up: Vec3::new(0.0, 1.0, 1.0),
             aspect: width as f32 / height as f32,
             fovy: 45.0_f32.to_radians(),
             znear: 0.1,

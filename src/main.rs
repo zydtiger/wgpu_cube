@@ -61,6 +61,9 @@ struct App {
     /// The wgpu rendering state (device, queue, pipeline, buffers, etc.)
     /// This is None until the app is resumed, then stays Some for the lifetime
     state: Option<State>,
+
+    /// Time of last frame for delta time calculation
+    last_frame: std::time::Instant,
 }
 
 impl App {
@@ -72,6 +75,7 @@ impl App {
         Self {
             window: None,
             state: None,
+            last_frame: std::time::Instant::now(),
         }
     }
 }
@@ -166,7 +170,16 @@ impl ApplicationHandler for App {
 
             // Window needs to be redrawn
             // This is triggered by request_redraw() in about_to_wait()
-            WindowEvent::RedrawRequested => match state.render() {
+            WindowEvent::RedrawRequested => {
+                // Calculate delta time
+                let now = std::time::Instant::now();
+                let delta_time = now.duration_since(self.last_frame).as_secs_f32();
+                self.last_frame = now;
+
+                // Update cube rotation
+                state.update(delta_time);
+
+                match state.render() {
                 Ok(_) => {} // Render succeeded, nothing to do
 
                 // Surface was lost (e.g., monitor disconnected) or outdated
@@ -190,7 +203,8 @@ impl ApplicationHandler for App {
                 Err(wgpu::SurfaceError::Other) => {
                     eprintln!("Surface error!");
                 }
-            },
+                }
+            }
 
             // Ignore all other window events (mouse movement, focus, etc.)
             _ => {}
